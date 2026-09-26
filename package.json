@@ -1,7 +1,7 @@
 {
   "name": "@plumeume/dsh-computer-use",
   "version": "1.0.0",
-  "description": "DeepSeek Harness 0.1.7-native computer use: computer_* drives the real Windows desktop (SendInput), desktop_* drives an isolated desktop object. Node plugin layer + PowerShell Win32 drivers; bundles a zero-dependency CAD MCP bridge.",
+  "description": "DeepSeek Harness 0.1.7-native computer use: computer_* drives the real Windows desktop (SendInput), desktop_* drives an isolated desktop object. Node plugin layer + PowerShell Win32 drivers, no third-party dependencies.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -9,17 +9,13 @@
       "default": "./lib/index.js"
     },
     "./cordis.patch.yml": "./cordis.patch.yml",
-    "./package.json": "./package.json",
-    "./mcp/cadmcp2.cjs": "./mcp/cadmcp2.cjs"
+    "./package.json": "./package.json"
   },
   "files": [
     "lib",
     "scripts",
     "cordis.patch.yml",
-    "README.md",
-    "mcp/cadmcp2.cjs",
-    "mcp/bridge_server2.ps1",
-    "mcp/bridge_worker2.ps1"
+    "README.md"
   ],
   "keywords": [
     "deepseek",

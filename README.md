@@ -46,39 +46,11 @@ Win32 interop class is cached in `%TEMP%\dsh-computer-use` and reused, so a warm
 `invoke` (real desktop) creates/opens the desktop and launches a `keeper` that holds it alive, then
 launches one `worker` **on** the desktop per action and waits for its JSON result file.
 
-## 随包分发的 CAD MCP server / Bundled CAD MCP server
+## 关于 CAD MCP 桥
 
-`mcp/` 里带了整套 CAD 桥。装这个包就有，不需要在机器上另建一套 cadmcp 目录：
-
-| 文件 | 作用 |
-|---|---|
-| `mcp/cadmcp2.cjs` | 宿主侧 MCP server（stdio → TCP 8773），零依赖 |
-| `mcp/bridge_server2.ps1` | 隔离桌面里的 TCP 监听（worker runspace 隔离，卡住也能答 PING） |
-| `mcp/bridge_worker2.ps1` | 真正调 AutoCAD COM 的 worker |
-
-宿主侧入口由 profile 补丁用**包名**定位，不写机器路径——DSH 自带的 profile 就是这么定位包内文件的：
-
-```yaml
-- insert:
-    - id: mcp-cad
-      name: '@deepseek-ai/dsh-mcp-client'
-      config:
-        transport: stdio
-        serverName: cad
-        command: !!js 'process.execPath'          # 跑 DSH 的那个 node，不依赖 PATH
-        args:
-          - !!js >-
-            process.getBuiltinModule('node:module').createRequire(baseUrl).resolve('@plumeume/dsh-computer-use/mcp/cadmcp2.cjs')
-        failOnStartupError: false
-```
-
-两个必须记住的点：
-
-* 文件必须是 **`.cjs`**。本包是 `"type": "module"`，包内 `.js` 一律按 ESM 解析，而 cadmcp2 是 CommonJS，叫 `.js` 会直接 `require is not defined in ES module scope`。
-* `exports` 映射里要显式列出该子路径，否则 `require.resolve` 会被 exports 挡掉。
-
-桥的运行时临时目录默认是 **`mcp/cad_fig/`**（跟着桥走，不再依赖机器特定文件夹）：日志 `bridge2.txt`、快照 `_snap*.png`、`_eval.txt`。
-两侧都用 `CADMCP2_SNAP_DIR` 覆盖；桥另可传 `-SnapDir` / `-LogPath`。打包 tgz 时该目录被显式排除（`files` 逐项枚举 mcp 文件），日志和快照不会进发行包。
+本包**只做 computer use**，不带 CAD 桥。`mcp/cadmcp2.cjs` + 两个 PowerShell 端（TCP 8773 桥、
+AutoCAD COM worker）是**独立的一套东西**，按需单独接进 profile —— 用包名解析、不写机器路径即可，
+不需要把它塞进这个插件包。
 
 ## 工具 / Tools
 
