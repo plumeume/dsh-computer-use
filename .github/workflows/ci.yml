@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check (ESM + CJS)
+        shell: pwsh
+        run: |
+          Get-ChildItem lib/*.js, mcp/cadmcp2.cjs | ForEach-Object {
+            node --check $_.FullName
+            if ($LASTEXITCODE -ne 0) { throw "syntax check failed: $($_.Name)" }
+          }
+      - name: Parse check (PowerShell drivers)
+        shell: pwsh
+        run: |
+          $errors = @()
+          Get-ChildItem scripts/*.ps1, mcp/*.ps1 | ForEach-Object {
+            $e = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$e) | Out-Null
+            if ($e.Count -gt 0) { $errors += "$($_.Name): $($e[0].Message)" }
+          }
+          if ($errors.Count -gt 0) { throw ($errors -join "; ") }
+          'all PowerShell files parse'

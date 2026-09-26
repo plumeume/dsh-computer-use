@@ -1,0 +1,22 @@
+# dsh-computer-use bundle patch (0.1.7-native rewrite)
+#
+# A single PLAIN insert. The plugin registers both tool families itself:
+#   computer_*  - the real Windows desktop (SendInput)
+#   desktop_*   - an isolated desktop object (CreateDesktop + PostMessage)
+#
+# Deliberately no config block here, for two reasons:
+#   * a bundle row carrying config cannot hot-mount (the market hot-mounts only
+#     plain inserts), so keeping it plain means enabling this plugin never needs
+#     a harness restart;
+#   * the meaningful defaults are declared in the plugin Config schema
+#     (lib/index.js), and a profile can override any of them with its own
+#     computer-use row under the patch layer.
+#
+# Schema defaults: requireApproval=false (this harness denies an approval ask
+# outright, so true would make every tool unusable), callTimeoutMs=60000,
+# maxScreenshot 1600x1200, normalizedCoordinates=true, desktopName=DSHIsolated.
+#
+# This file is machine independent: no absolute paths, no user names.
+- insert:
+    - id: computer-use
+      name: '@plumeume/dsh-computer-use'

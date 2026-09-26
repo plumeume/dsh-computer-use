@@ -1,0 +1,10 @@
+# runtime artifacts - never commit
+node_modules/
+mcp/cad_fig/
+*.log
+*.bak-*
+*.tgz
+dist/
+*.png
+*.bmp
+.cache/
