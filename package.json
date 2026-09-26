@@ -57,5 +57,8 @@
   "bugs": {
     "url": "https://github.com/plumeume/dsh-computer-use/issues"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }
