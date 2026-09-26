@@ -46,12 +46,6 @@ Win32 interop class is cached in `%TEMP%\dsh-computer-use` and reused, so a warm
 `invoke` (real desktop) creates/opens the desktop and launches a `keeper` that holds it alive, then
 launches one `worker` **on** the desktop per action and waits for its JSON result file.
 
-## 关于 CAD MCP 桥
-
-本包**只做 computer use**，不带 CAD 桥。`mcp/cadmcp2.cjs` + 两个 PowerShell 端（TCP 8773 桥、
-AutoCAD COM worker）是**独立的一套东西**，按需单独接进 profile —— 用包名解析、不写机器路径即可，
-不需要把它塞进这个插件包。
-
 ## 工具 / Tools
 
 Real desktop (SendInput, takes the real mouse and focus):
