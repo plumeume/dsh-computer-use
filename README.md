@@ -3,7 +3,7 @@
 DeepSeek Harness **0.1.7-native** computer use. `computer_*` drives the real Windows desktop;
 `desktop_*` drives an **isolated desktop object** that never touches the real mouse, keyboard or focus.
 
-This is a clean reimplementation of the idea behind `@crazy_th/dsh-computer-use`, not a repackage of it.
+This is a clean reimplementation of the idea behind , not a repackage of it.
 
 ## 为什么重写 / Why a rewrite
 
